@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juegos Olímpicos de la Liga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EAF6FE;
+    --surface:#FFFFFF;
+    --surface-2:#DCEEFA;
+    --cream:#16283A;
+    --cream-dim:#5C7185;
+    --gold:#FCB131;
+    --gold-ink:#8A5A0E;
+    --gold-dim:#E3B65B;
+    --red:#EE334E;
+    --green:#00A651;
+    --blue:#0081C8;
+    --black-ring:#1B1B1B;
+    --line: rgba(22,40,58,0.14);
+    --radius: 14px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(252,177,49,0.10), transparent 40%),
+      radial-gradient(circle at 90% 15%, rgba(0,129,200,0.08), transparent 40%),
+      radial-gradient(circle at 10% 88%, rgba(238,51,78,0.06), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(0,166,81,0.07), transparent 45%);
+    color: var(--cream);
+    font-family: 'Work Sans', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px 0;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; padding: 28px 18px 0; }
+
+  .rings{ display:flex; justify-content:center; gap:9px; margin-bottom: 12px; }
+  .rings span{ width:15px; height:15px; border-radius:50%; display:inline-block; background:transparent; border: 3px solid; }
+  .rings span:nth-child(1){ border-color: var(--blue); }
+  .rings span:nth-child(2){ border-color: var(--black-ring); }
+  .rings span:nth-child(3){ border-color: var(--red); }
+  .rings span:nth-child(4){ border-color: var(--gold); }
+  .rings span:nth-child(5){ border-color: var(--green); }
+
+  header.app-header{ text-align:center; margin-bottom: 22px; }
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    letter-spacing: 3px;
+    font-size: 11px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  h1.title{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    font-size: 40px;
+    letter-spacing: 1px;
+    margin: 0;
+    color: var(--cream);
+  }
+  .subtitle{
+    color: var(--cream-dim);
+    font-size: 14px;
+    margin-top: 6px;
+  }
+
+  nav.tabs{
+    display:flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 4px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+  nav.tabs button{
+    flex: 0 0 auto;
+    background: transparent;
+    border: none;
+    color: var(--cream-dim);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    border-bottom: 3px solid transparent;
+    transition: all .15s ease;
+  }
+  nav.tabs button:hover{ color: var(--cream); }
+  nav.tabs button.active{
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+  }
+
+  section.tab-panel{ display:none; }
+  section.tab-panel.active{ display:block; }
+
+  .card{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .card h2{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    font-size: 20px;
+    letter-spacing: .5px;
+    margin: 0 0 4px;
+    color: var(--cream);
+  }
+  .card .hint{
+    font-size: 13px;
+    color: var(--cream-dim);
+    margin: 0 0 14px;
+    line-height: 1.5;
+  }
+
+  label{ font-size: 12px; color: var(--cream-dim); display:block; margin-bottom: 4px; letter-spacing: .3px; }
+  input[type=text], input[type=number], select{
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--cream);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  input:focus, select:focus{ outline: 2px solid var(--blue); outline-offset: 1px; }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background: var(--blue);
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform .1s ease, filter .15s ease;
+  }
+  .btn:hover{ filter: brightness(1.08); }
+  .btn:active{ transform: scale(0.98); }
+  .btn.secondary{
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid var(--line);
+  }
+  .btn.gold{ background: var(--gold); color: #241A05; }
+  .btn.green{ background: var(--green); color: #FFFFFF; }
+  .btn.danger{ background: var(--red); color: #FFFFFF; }
+  .btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .btn.small{ padding: 6px 10px; font-size: 12px; }
+
+  .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; }
+  .row > *{ flex: 1; min-width: 140px; }
+  .row .btn-field label{ visibility:hidden; }
+  .row .btn-field .btn{ width:100%; margin-bottom:12px; }
+
+  ul.list{ list-style:none; margin:0; padding:0; }
+  ul.list li{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 10px;
+    padding: 10px 4px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  ul.list li:last-child{ border-bottom:none; }
+  .tag{
+    font-family:'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: var(--surface-2);
+    color: var(--gold-ink);
+    border: 1px solid var(--gold-dim);
+  }
+  .empty{
+    text-align:center;
+    color: var(--cream-dim);
+    font-size: 13px;
+    padding: 24px 10px;
+  }
+  .iconbtn{
+    background:none; border:none; color: var(--cream-dim);
+    cursor:pointer; font-size: 16px; padding: 2px 6px;
+  }
+  .iconbtn:hover{ color: var(--red); }
+
+  /* ---- Raffle ticket (signature element) ---- */
+  .ticket{
+    position: relative;
+    display:flex;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    margin-bottom: 18px;
+    overflow: visible;
+  }
+  .ticket .stub{
+    flex: 0 0 64px;
+    background: var(--surface-2);
+    border-radius: var(--radius) 0 0 var(--radius);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding: 10px 4px;
+    position: relative;
+  }
+  .ticket .stub .m{
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family:'Space Mono', monospace;
+    letter-spacing: 3px;
+    font-size: 11px;
+    color: var(--gold-ink);
+    text-transform: uppercase;
+  }
+  .ticket .divider{
+    position:relative;
+    width: 0;
+    border-left: 2px dashed var(--line);
+    margin: 10px 0;
+  }
+  .ticket .divider::before, .ticket .divider::after{
+    content:'';
+    position:absolute;
+    left: -8px;
+    width: 16px; height: 16px;
+    background: var(--bg);
+    border-radius: 50%;
+  }
+  .ticket .divider::before{ top: -18px; }
+  .ticket .divider::after{ bottom: -18px; }
+  .ticket .main{
+    flex: 1;
+    padding: 14px 16px;
+  }
+  .ticket .date-line{
+    font-family:'Space Mono', monospace;
+    color: var(--blue);
+    font-size: 12px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .ticket .date-big{
+    font-family:'Anton', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .game-badges{ display:flex; flex-wrap:wrap; gap:8px; }
+  .game-badge{
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    transition: border-color .15s ease;
+  }
+  .game-badge:hover{ border-color: var(--gold-dim); }
+  .game-badge .dot{
+    width:7px; height:7px; border-radius:50%;
+    background: var(--cream-dim);
+    flex: 0 0 auto;
+  }
+  .game-badge.done .dot{ background: var(--green); }
+  .game-badge.open{ border-color: var(--blue); }
+
+  .result-panel{
+    margin-top: 12px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .result-panel h4{ margin:0 0 10px; font-size: 14px; font-family:'Space Mono',monospace; color: var(--blue); text-transform:uppercase; letter-spacing:.5px;}
+  .present-row{
+    display:flex; align-items:center; gap:8px;
+    padding: 6px 0;
+    font-size: 14px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .present-row:last-of-type{ border-bottom:none; }
+  .present-row input[type=checkbox]{ width:16px; height:16px; }
+  .present-row .name{ flex:1; }
+  .present-row input[type=number]{
+    width: 64px; margin: 0; padding: 6px 8px; text-align:center;
+  }
+  .team-block{
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display:flex; align-items:center; gap:10px; justify-content:space-between;
+  }
+  .team-block .members{ font-size: 13px; color: var(--cream-dim); }
+  .team-block .team-name{ font-weight:600; font-size:14px; }
+
+  table.standings{ width:100%; border-collapse: collapse; }
+  table.standings th{
+    text-align:left; font-family:'Space Mono',monospace; font-size:11px;
+    letter-spacing:.5px; text-transform:uppercase; color: var(--cream-dim);
+    padding: 6px 8px; border-bottom: 1px solid var(--line);
+  }
+  table.standings td{ padding: 10px 8px; border-bottom: 1px solid var(--line); font-size:14px; }
+  table.standings tr:last-child td{ border-bottom:none; }
+  .rank-badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    width: 26px; height:26px; border-radius:50%;
+    font-family:'Space Mono',monospace; font-weight:700; font-size:12px;
+    background: var(--surface-2); color: var(--cream);
+  }
+  .rank-badge.gold{ background: var(--gold); color:#241A05; }
+  .rank-badge.silver{ background:#C7C4B8; color:#241A05; }
+  .rank-badge.bronze{ background:#B98657; color:#241A05; }
+  .points-cell{ font-family:'Space Mono',monospace; color: var(--gold-ink); font-weight:700; }
+
+  .helper-text{ font-size:12px; color: var(--cream-dim); margin: 4px 0 10px; line-height:1.5;}
+  .danger-zone{ margin-top: 30px; opacity: .75; }
+  .toast{
+    position: fixed; bottom: 18px; left:50%; transform: translateX(-50%);
+    background: var(--surface); border: 1px solid var(--gold-dim);
+    box-shadow: 0 8px 20px rgba(22,40,58,0.18);
+    color: var(--cream); padding: 10px 18px; border-radius: 30px;
+    font-size: 13px; z-index: 50; opacity:0; pointer-events:none;
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .toast.show{ opacity:1; transform: translateX(-50%) translateY(-6px); }
+
+  .overlay{
+    position: fixed; inset: 0;
+    background: rgba(22,40,58,0.55);
+    display:flex; align-items:center; justify-content:center;
+    padding: 20px; z-index: 200;
+  }
+  .overlay.hidden{ display:none; }
+  .overlay-card{ max-width: 340px; width:100%; margin:0; }
+  .overlay-card input{ margin-bottom: 6px; }
+  .access-error{ color: var(--red); font-size: 12px; min-height: 14px; margin: 0 0 12px; }
+
+  @media (max-width: 480px){
+    h1.title{ font-size: 30px; }
+    .ticket .stub{ flex-basis: 48px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="app-header">
+    <div class="rings"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="eyebrow">Glorius · Altius · Sin llorar</div>
+    <h1 class="title" id="appTitle">JUEGOS OLÍMPICOS DE LA LIGA</h1>
+    <div class="subtitle" id="appSubtitle">12 fechas, un domingo al azar por mes, juegos al azar cada vez.</div>
+  </header>
+
+  <nav class="tabs">
+    <button data-tab="participantes" class="active">Participantes</button>
+    <button data-tab="juegos">Juegos</button>
+    <button data-tab="temporada">Temporada</button>
+    <button data-tab="tabla">Tabla</button>
+  </nav>
+
+  <section class="tab-panel active" id="tab-participantes">
+    <div class="card">
+      <h2>Anotarse</h2>
+      <p class="hint">Cargá tu nombre para sumarte a la liga.</p>
+      <div class="row">
+        <div>
+          <label for="pName">Nombre</label>
+          <input type="text" id="pName" placeholder="Ej: Martina">
+        </div>
+        <div class="btn-field">
+          <label>&nbsp;</label>
+          <button class="btn" id="addParticipantBtn">Agregar</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Participantes <span id="pCount" class="tag"></span></h2>
+      <ul class="list" id="participantList"></ul>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-juegos">
+    <div class="card">
+      <h2>Proponer un juego</h2>
+      <p class="hint">Cada participante propone dos juegos. Elegí si se juega individual o en equipos armados al azar.</p>
+      <div class="row">
+        <div>
+          <label for="gName">Nombre del juego</label>
+          <input type="text" id="gName" placeholder="Ej: Truco">
+        </div>
+        <div>
+          <label for="gOwner">Propuesto por</label>
+          <select id="gOwner"></select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="gType">Tipo</label>
+          <select id="gType">
+            <option value="individual">Individual</option>
+            <option value="equipos">Por equipos (al azar)</option>
+          </select>
+        </div>
+        <div id="teamSizeWrap" style="display:none;">
+          <label for="gTeamSize">Jugadores por equipo</label>
+          <input type="number" id="gTeamSize" min="2" value="2">
+        </div>
+        <div class="btn-field">
+          <label>&nbsp;</label>
+          <button class="btn" id="addGameBtn">Agregar juego</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Juegos propuestos <span id="gCount" class="tag"></span></h2>
+      <ul class="list" id="gameList"></ul>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-temporada">
+    <div class="card" id="seasonGenerateCard">
+      <h2>Abrir la temporada</h2>
+      <p class="hint">Las fechas no se sortean todas juntas: se van revelando de a una, con un mes de anticipación. Cada mes se sortea el domingo y los juegos de la fecha que viene.</p>
+      <button class="btn gold" id="generateSeasonBtn">Abrir temporada</button>
+      <p class="helper-text" id="generateWarning"></p>
+    </div>
+    <div id="nextDrawContainer"></div>
+    <div id="ticketsContainer"></div>
+    <div id="lockedContainer"></div>
+    <div class="card danger-zone" id="resetSeasonCard" style="display:none;">
+      <h2>Zona de riesgo</h2>
+      <p class="hint">Vuelve a abrir la temporada desde cero. Se pierden todos los sorteos y resultados cargados.</p>
+      <button class="btn danger" id="resetSeasonBtn">Reiniciar temporada</button>
+    </div>
+  </section>
+
+
+  <section class="tab-panel" id="tab-tabla">
+    <div class="card">
+      <h2>Tabla de posiciones</h2>
+      <p class="hint">Suma de puntos de todas las fechas jugadas hasta ahora.</p>
+      <table class="standings" id="standingsTable"></table>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="overlay hidden" id="accessOverlay">
+  <div class="card overlay-card">
+    <h2>Código de acceso</h2>
+    <p class="hint">Para anotar cambios (participantes, juegos, sorteos, resultados) necesitás el código de la liga. Para solo mirar, podés seguir sin ponerlo.</p>
+    <input type="text" id="accessCodeInput" placeholder="Código" autocomplete="off">
+    <p class="access-error" id="accessError"></p>
+    <div class="row">
+      <button class="btn secondary" id="accessCancelBtn">Solo mirar</button>
+      <button class="btn" id="accessSubmitBtn">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+// ---------- 1) PEGÁ ACÁ TU CONFIG DE FIREBASE ----------
+// La sacás de: Firebase Console > ⚙️ Configuración del proyecto > Tus apps > SDK setup and configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAyUTjbLYW7lrUKz2XCR-ocXqOR_K6EV1g",
+  authDomain: "olimpiadas-a4e75.firebaseapp.com",
+  projectId: "olimpiadas-a4e75",
+  storageBucket: "olimpiadas-a4e75.firebasestorage.app",
+  messagingSenderId: "124754940725",
+  appId: "1:124754940725:web:6a8fbbca5f3432a7c2b27c",
+  measurementId: "G-RYRT5YRLQE"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const COLLECTION = 'liga-de-juegos'; // todas las claves (participants, games, season-meta, month:1...) viven acá como documentos
+
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+const state = {
+  participants: [],
+  games: [],
+  seasonMeta: null,   // {year, months:[{month, date, gameIds}]}
+  months: {}          // monthNumber -> {results:{gameId:{...}}}
+};
+
+// ---------- código de acceso para escribir ----------
+// Se guarda en este navegador (localStorage) para no pedirlo cada vez.
+// Se valida en el momento (con una escritura de prueba) para poder avisar
+// "código incorrecto" al toque, en vez de recién cuando se intenta guardar algo.
+let ACCESS_CODE = localStorage.getItem('liga-access-code') || '';
+
+async function validateCode(code){
+  try{
+    await setDoc(doc(db, COLLECTION, '_ping'), { value: Date.now(), passcode: code });
+    return true;
+  }catch(e){
+    if(e && e.code === 'permission-denied') return false;
+    throw e;
+  }
+}
+
+function openAccessGate(){
+  return new Promise((resolve)=>{
+    const overlay = document.getElementById('accessOverlay');
+    const input = document.getElementById('accessCodeInput');
+    const errorEl = document.getElementById('accessError');
+    const submitBtn = document.getElementById('accessSubmitBtn');
+    const skipBtn = document.getElementById('accessCancelBtn');
+
+    errorEl.textContent = '';
+    input.value = '';
+    overlay.classList.remove('hidden');
+    setTimeout(()=> input.focus(), 50);
+
+    function cleanup(){
+      overlay.classList.add('hidden');
+      submitBtn.removeEventListener('click', trySubmit);
+      skipBtn.removeEventListener('click', onSkip);
+      input.removeEventListener('keydown', onKeydown);
+    }
+    async function trySubmit(){
+      const code = input.value.trim();
+      if(!code){ errorEl.textContent = 'Escribí un código.'; return; }
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Verificando...';
+      errorEl.textContent = '';
+      let valid;
+      try{
+        valid = await validateCode(code);
+      }catch(e){
+        console.error('validate code error', e);
+        submitBtn.disabled = false; submitBtn.textContent = 'Entrar';
+        errorEl.textContent = 'No se pudo verificar. Revisá tu conexión e intentá de nuevo.';
+        return;
+      }
+      submitBtn.disabled = false; submitBtn.textContent = 'Entrar';
+      if(valid){
+        ACCESS_CODE = code;
+        localStorage.setItem('liga-access-code', ACCESS_CODE);
+        cleanup();
+        resolve(true);
+      }else{
+        errorEl.textContent = 'Código incorrecto, probá de nuevo.';
+        input.value = '';
+        input.focus();
+      }
+    }
+    function onSkip(){ cleanup(); resolve(false); }
+    function onKeydown(e){ if(e.key === 'Enter') trySubmit(); }
+
+    submitBtn.addEventListener('click', trySubmit);
+    skipBtn.addEventListener('click', onSkip);
+    input.addEventListener('keydown', onKeydown);
+  });
+}
+
+async function ensureAccessCode(){
+  if(ACCESS_CODE) return true;
+  return await openAccessGate();
+}
+function rejectAccessCode(){
+  ACCESS_CODE = '';
+  localStorage.removeItem('liga-access-code');
+}
+
+// ---------- storage helpers (Firestore) ----------
+// Los borrados se hacen como "value: null" en vez de un delete real, así una
+// única regla (passcode correcto) alcanza para crear, editar y "borrar".
+// sSet/sDelete devuelven true/false según si realmente se guardó.
+async function sGet(key){
+  try{
+    const snap = await getDoc(doc(db, COLLECTION, key));
+    if(!snap.exists()) return null;
+    const v = snap.data().value;
+    return (v === null || v === undefined) ? null : v;
+  }catch(e){ console.error('storage get error', key, e); return null; }
+}
+async function sSet(key, value){
+  const ok = await ensureAccessCode();
+  if(!ok){ showToast('Necesitás el código de acceso para guardar cambios'); return false; }
+  try{
+    await setDoc(doc(db, COLLECTION, key), { value, passcode: ACCESS_CODE });
+    return true;
+  }catch(e){
+    if(e && e.code === 'permission-denied'){
+      rejectAccessCode();
+      showToast('Código de acceso incorrecto');
+    } else {
+      console.error('storage set error', key, e);
+      showToast('No se pudo guardar. Probá de nuevo.');
+    }
+    return false;
+  }
+}
+async function sDelete(key){
+  return sSet(key, null);
+}
+
+function uid(){ return Math.random().toString(36).slice(2,10); }
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(()=> t.classList.remove('show'), 2200);
+}
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// ---------- load ----------
+async function loadAll(){
+  state.participants = (await sGet('participants')) || [];
+  state.games = (await sGet('games')) || [];
+  state.seasonMeta = await sGet('season-meta');
+  if(state.seasonMeta){
+    const results = await Promise.all(state.seasonMeta.months.map(m => sGet('month:'+m.month)));
+    state.seasonMeta.months.forEach((m,i)=>{
+      state.months[m.month] = results[i] || {results:{}};
+    });
+  }
+  renderAll();
+}
+
+function renderAll(){
+  renderParticipants();
+  renderGameOwnerSelect();
+  renderGames();
+  renderSeasonTab();
+  renderStandings();
+  updateHeader();
+}
+
+function updateHeader(){
+  if(state.seasonMeta){
+    document.getElementById('appTitle').textContent = 'JUEGOS OLÍMPICOS DE LA LIGA ' + state.seasonMeta.year;
+    document.getElementById('appSubtitle').textContent = state.participants.length + ' participantes · ' + state.games.length + ' juegos en el sorteo';
+  }
+}
+
+// ---------- tabs ----------
+document.querySelectorAll('nav.tabs button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ---------- Participantes ----------
+document.getElementById('addParticipantBtn').addEventListener('click', async ()=>{
+  const input = document.getElementById('pName');
+  const name = input.value.trim();
+  if(!name){ showToast('Escribí un nombre primero'); return; }
+  const newParticipant = {id: uid(), name};
+  state.participants.push(newParticipant);
+  const ok = await sSet('participants', state.participants);
+  if(!ok){ state.participants = state.participants.filter(p => p.id !== newParticipant.id); return; }
+  input.value = '';
+  renderParticipants();
+  renderGameOwnerSelect();
+  updateHeader();
+  showToast('Listo, ' + name + ' está anotado/a');
+});
+
+function renderParticipants(){
+  const ul = document.getElementById('participantList');
+  document.getElementById('pCount').textContent = state.participants.length;
+  if(state.participants.length === 0){
+    ul.innerHTML = '<div class="empty">Todavía no hay nadie anotado.</div>';
+    return;
+  }
+  ul.innerHTML = state.participants.map(p => `
+    <li>
+      <span>${escapeHtml(p.name)}</span>
+      <button class="iconbtn" title="Eliminar" data-remove-participant="${p.id}">✕</button>
+    </li>`).join('');
+  ul.querySelectorAll('[data-remove-participant]').forEach(b=>{
+    b.addEventListener('click', async ()=>{
+      const id = b.dataset.removeParticipant;
+      const backup = state.participants;
+      state.participants = state.participants.filter(p=>p.id !== id);
+      const ok = await sSet('participants', state.participants);
+      if(!ok){ state.participants = backup; return; }
+      renderParticipants();
+      renderGameOwnerSelect();
+      updateHeader();
+    });
+  });
+}
+
+// ---------- Juegos ----------
+document.getElementById('gType').addEventListener('change', (e)=>{
+  document.getElementById('teamSizeWrap').style.display = e.target.value === 'equipos' ? 'block' : 'none';
+});
+
+function renderGameOwnerSelect(){
+  const sel = document.getElementById('gOwner');
+  if(state.participants.length === 0){
+    sel.innerHTML = '<option value="">Anotá participantes primero</option>';
+    return;
+  }
+  sel.innerHTML = state.participants.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+}
+
+document.getElementById('addGameBtn').addEventListener('click', async ()=>{
+  const name = document.getElementById('gName').value.trim();
+  const ownerId = document.getElementById('gOwner').value;
+  const type = document.getElementById('gType').value;
+  const teamSize = parseInt(document.getElementById('gTeamSize').value, 10) || 2;
+  if(!name){ showToast('Escribí el nombre del juego'); return; }
+  if(!ownerId){ showToast('Necesitás anotar participantes primero'); return; }
+  const newGame = {id: uid(), name, ownerId, type, teamSize: type==='equipos' ? teamSize : null};
+  state.games.push(newGame);
+  const ok = await sSet('games', state.games);
+  if(!ok){ state.games = state.games.filter(g => g.id !== newGame.id); return; }
+  document.getElementById('gName').value = '';
+  renderGames();
+  updateHeader();
+  showToast('Juego agregado');
+});
+
+function renderGames(){
+  const ul = document.getElementById('gameList');
+  document.getElementById('gCount').textContent = state.games.length;
+  if(state.games.length === 0){
+    ul.innerHTML = '<div class="empty">Todavía no se propuso ningún juego.</div>';
+    return;
+  }
+  ul.innerHTML = state.games.map(g => {
+    const owner = state.participants.find(p=>p.id===g.ownerId);
+    const typeLabel = g.type === 'equipos' ? `Equipos de ${g.teamSize}` : 'Individual';
+    return `<li>
+      <span>${escapeHtml(g.name)} <span class="tag" style="margin-left:6px;">${typeLabel}</span></span>
+      <span style="display:flex; align-items:center; gap:8px;">
+        <span style="color:var(--cream-dim); font-size:12px;">${owner ? escapeHtml(owner.name) : '—'}</span>
+        <button class="iconbtn" title="Eliminar" data-remove-game="${g.id}">✕</button>
+      </span>
+    </li>`;
+  }).join('');
+  ul.querySelectorAll('[data-remove-game]').forEach(b=>{
+    b.addEventListener('click', async ()=>{
+      const id = b.dataset.removeGame;
+      const backup = state.games;
+      state.games = state.games.filter(g=>g.id !== id);
+      const ok = await sSet('games', state.games);
+      if(!ok){ state.games = backup; return; }
+      renderGames();
+      updateHeader();
+    });
+  });
+}
+
+// ---------- Temporada ----------
+function randomSundayOfMonth(year, month1based){
+  const sundays = [];
+  const d = new Date(year, month1based-1, 1);
+  while(d.getMonth() === month1based-1){
+    if(d.getDay() === 0) sundays.push(new Date(d));
+    d.setDate(d.getDate()+1);
+  }
+  return sundays[Math.floor(Math.random()*sundays.length)];
+}
+
+function formatFecha(dateStr){
+  const [y,m,d] = dateStr.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  return `${DIAS[dt.getDay()]} ${d} de ${MESES[m-1]}`;
+}
+
+function formatFechaLarga(dt){
+  return `${dt.getDate()} de ${MESES[dt.getMonth()]} de ${dt.getFullYear()}`;
+}
+
+// A month unlocks one calendar month before it happens (e.g. enero se sortea en diciembre)
+function thresholdDateForMonth(year, month1based){
+  return new Date(year, month1based-2, 1);
+}
+
+document.getElementById('generateSeasonBtn').addEventListener('click', async ()=>{
+  if(state.participants.length === 0 || state.games.length === 0){
+    document.getElementById('generateWarning').textContent = 'Necesitás al menos un participante y un juego cargado antes de abrir la temporada.';
+    return;
+  }
+  await initializeSeason();
+});
+
+async function initializeSeason(){
+  const year = new Date().getFullYear() + 1;
+  const months = [];
+  for(let m=1; m<=12; m++){
+    months.push({month:m, date:null, gameIds:null, revealed:false});
+  }
+  const meta = { year, remainingGameIds: shuffle(state.games.map(g=>g.id)), months };
+  const ok = await sSet('season-meta', meta);
+  if(!ok) return;
+  state.seasonMeta = meta;
+  state.months = {};
+  renderSeasonTab();
+  updateHeader();
+  showToast('Temporada ' + meta.year + ' abierta. Las fechas se van a ir sorteando mes a mes.');
+}
+
+async function drawMonth(monthObj){
+  const meta = state.seasonMeta;
+  const undrawnCount = meta.months.filter(m=>!m.revealed).length;
+  const pool = meta.remainingGameIds;
+  let count;
+  if(undrawnCount <= 1){
+    count = pool.length;
+  } else {
+    const base = Math.floor(pool.length / undrawnCount);
+    const extra = pool.length % undrawnCount;
+    count = base + (Math.random() < (extra/undrawnCount) ? 1 : 0);
+    count = Math.min(count, pool.length);
+  }
+  const shuffledPool = shuffle(pool);
+  const chosen = shuffledPool.slice(0, count);
+  const remainingPool = shuffledPool.slice(count);
+
+  const date = randomSundayOfMonth(meta.year, monthObj.month);
+  const iso = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+
+  // armamos un borrador sin tocar todavía el estado real, hasta confirmar que se guardó
+  const draftMeta = JSON.parse(JSON.stringify(meta));
+  const draftMonth = draftMeta.months.find(m => m.month === monthObj.month);
+  draftMonth.date = iso;
+  draftMonth.gameIds = chosen;
+  draftMonth.revealed = true;
+  draftMeta.remainingGameIds = remainingPool;
+
+  const okMeta = await sSet('season-meta', draftMeta);
+  if(!okMeta) return;
+  const monthResult = {results:{}};
+  await sSet('month:'+monthObj.month, monthResult);
+
+  state.seasonMeta = draftMeta;
+  state.months[monthObj.month] = monthResult;
+  renderSeasonTab();
+  showToast('Se sorteó la fecha de ' + MESES[monthObj.month-1]);
+}
+
+document.getElementById('resetSeasonBtn').addEventListener('click', async ()=>{
+  if(!confirm('¿Reiniciar la temporada? Se pierden todos los sorteos y resultados cargados.')) return;
+  const ok = await sDelete('season-meta');
+  if(!ok) return;
+  await Promise.all(Array.from({length:12}, (_,i)=> sDelete('month:'+(i+1))));
+  state.seasonMeta = null;
+  state.months = {};
+  renderSeasonTab();
+  updateHeader();
+  renderStandings();
+  showToast('Temporada reiniciada');
+});
+
+function renderSeasonTab(){
+  const genCard = document.getElementById('seasonGenerateCard');
+  const resetCard = document.getElementById('resetSeasonCard');
+  const container = document.getElementById('ticketsContainer');
+  const nextDrawContainer = document.getElementById('nextDrawContainer');
+  const lockedContainer = document.getElementById('lockedContainer');
+
+  if(!state.seasonMeta){
+    genCard.style.display = 'block';
+    resetCard.style.display = 'none';
+    container.innerHTML = '';
+    nextDrawContainer.innerHTML = '';
+    lockedContainer.innerHTML = '';
+    return;
+  }
+  genCard.style.display = 'none';
+  resetCard.style.display = 'block';
+
+  const revealed = state.seasonMeta.months.filter(m=>m.revealed);
+  const next = state.seasonMeta.months.find(m=>!m.revealed);
+
+  // revealed tickets, most recently drawn first so the current fecha is on top
+  container.innerHTML = [...revealed].reverse().map(m => renderTicket(m)).join('');
+  revealed.forEach(m=>{
+    (m.gameIds||[]).forEach(gid=>{
+      const badge = container.querySelector(`[data-badge="${m.month}-${gid}"]`);
+      if(badge) badge.addEventListener('click', ()=> toggleResultPanel(m.month, gid));
+    });
+  });
+
+  if(next){
+    const threshold = thresholdDateForMonth(state.seasonMeta.year, next.month);
+    const eligible = new Date() >= threshold;
+    if(eligible){
+      nextDrawContainer.innerHTML = `
+        <div class="card" style="border-color: var(--gold-dim);">
+          <h2>Sortear ${MESES[next.month-1]}</h2>
+          <p class="hint">Ya se puede sortear la fecha y los juegos de ${MESES[next.month-1]} de ${state.seasonMeta.year}.</p>
+          <button class="btn gold" id="drawNextBtn">Sortear esta fecha</button>
+        </div>`;
+      document.getElementById('drawNextBtn').addEventListener('click', ()=> drawMonth(next));
+    } else {
+      nextDrawContainer.innerHTML = `
+        <div class="card" style="opacity:.7;">
+          <h2>Próximo sorteo: ${MESES[next.month-1]}</h2>
+          <p class="hint">Se habilita a partir del ${formatFechaLarga(threshold)}.</p>
+        </div>`;
+    }
+  } else {
+    nextDrawContainer.innerHTML = '';
+  }
+
+  const stillLocked = state.seasonMeta.months.filter(m=>!m.revealed && m !== next);
+  lockedContainer.innerHTML = stillLocked.length === 0 ? '' : `
+    <div class="card" style="opacity:.55;">
+      <h2>Fechas por sortear</h2>
+      <ul class="list">
+        ${stillLocked.map(m=>`<li><span>${MESES[m.month-1][0].toUpperCase()+MESES[m.month-1].slice(1)}</span><span class="tag">Por sortear</span></li>`).join('')}
+      </ul>
+    </div>`;
+}
+
+function renderTicket(m){
+  const monthData = state.months[m.month] || {results:{}};
+  const gamesHtml = m.gameIds.length === 0
+    ? '<span style="color:var(--cream-dim); font-size:13px;">Sin juegos asignados este mes.</span>'
+    : m.gameIds.map(gid=>{
+        const g = state.games.find(x=>x.id===gid);
+        if(!g) return '';
+        const done = !!monthData.results[gid];
+        return `<span class="game-badge ${done?'done':''}" data-badge="${m.month}-${gid}" id="badge-${m.month}-${gid}">
+          <span class="dot"></span>${escapeHtml(g.name)}
+        </span>`;
+      }).join('');
+
+  return `
+  <div class="ticket">
+    <div class="stub"><span class="m">${MESES[m.month-1].slice(0,3).toUpperCase()} · ${String(m.month).padStart(2,'0')}</span></div>
+    <div class="divider"></div>
+    <div class="main">
+      <div class="date-line">Fecha ${m.month} de 12</div>
+      <div class="date-big">${formatFecha(m.date)} de ${state.seasonMeta.year}</div>
+      <div class="game-badges">${gamesHtml}</div>
+      <div id="panelwrap-${m.month}"></div>
+    </div>
+  </div>`;
+}
+
+function toggleResultPanel(month, gameId){
+  const wrap = document.getElementById('panelwrap-'+month);
+  const existing = wrap.querySelector('.result-panel');
+  const badge = document.getElementById(`badge-${month}-${gameId}`);
+  document.querySelectorAll(`#panelwrap-${month} .result-panel`).forEach(p=>p.remove());
+  document.querySelectorAll(`[id^="badge-${month}-"]`).forEach(b=>b.classList.remove('open'));
+
+  if(existing && existing.dataset.game === gameId) return; // was open, now closed
+
+  badge.classList.add('open');
+  const game = state.games.find(g=>g.id===gameId);
+  const monthData = state.months[month] || {results:{}};
+  const saved = monthData.results[gameId];
+
+  const panel = document.createElement('div');
+  panel.className = 'result-panel';
+  panel.dataset.game = gameId;
+  panel.innerHTML = buildResultForm(game, saved);
+  wrap.appendChild(panel);
+  wireResultForm(panel, month, game);
+}
+
+function buildResultForm(game, saved){
+  const presentSet = saved ? new Set(saved.presentIds) : new Set(state.participants.map(p=>p.id));
+  const checkboxes = state.participants.map(p => `
+    <div class="present-row">
+      <input type="checkbox" data-present="${p.id}" ${presentSet.has(p.id)?'checked':''}>
+      <span class="name">${escapeHtml(p.name)}</span>
+    </div>`).join('');
+
+  let bodyHtml = `<h4>¿Quién estuvo presente?</h4>${checkboxes}`;
+
+  if(game.type === 'equipos'){
+    bodyHtml += `<div style="margin-top:12px;">
+      <button class="btn secondary small" data-action="build-teams">Armar equipos al azar</button>
+      <div id="teamsArea" style="margin-top:10px;">${saved && saved.teams ? renderSavedTeams(saved.teams) : ''}</div>
+    </div>`;
+  } else {
+    bodyHtml += `<div id="positionsArea" style="margin-top:6px;">${saved ? renderSavedPositions(saved.presentIds, saved.positions) : ''}</div>`;
+  }
+
+  bodyHtml += `<p class="helper-text">Posición: 1 = primer puesto. En caso de empate repetí el número y seguí consecutivo (ej: 1, 1, 2).</p>
+  <button class="btn green" data-action="save-result">Guardar resultado</button>`;
+  return bodyHtml;
+}
+
+function renderSavedPositions(presentIds, positions){
+  return presentIds.map(pid=>{
+    const p = state.participants.find(x=>x.id===pid);
+    if(!p) return '';
+    return `<div class="present-row">
+      <span class="name">${escapeHtml(p.name)}</span>
+      <input type="number" min="1" data-position="${pid}" value="${positions[pid] ?? ''}">
+    </div>`;
+  }).join('');
+}
+
+function renderSavedTeams(teams){
+  return teams.map((t,i)=>`
+    <div class="team-block" data-team-members='${JSON.stringify(t.memberIds)}'>
+      <div>
+        <div class="team-name">Equipo ${i+1}</div>
+        <div class="members">${t.memberIds.map(id=>{
+          const p = state.participants.find(x=>x.id===id);
+          return p ? escapeHtml(p.name) : '';
+        }).join(', ')}</div>
+      </div>
+      <input type="number" min="1" style="width:64px;" data-team-position="${t.id}" value="${t.position ?? ''}">
+    </div>`).join('');
+}
+
+function wireResultForm(panel, month, game){
+  if(game.type === 'individual'){
+    const area = panel.querySelector('#positionsArea');
+    if(area.innerHTML.trim() === ''){
+      syncPositionsArea(panel, area);
+    }
+    panel.querySelectorAll('[data-present]').forEach(cb=>{
+      cb.addEventListener('change', ()=> syncPositionsArea(panel, area));
+    });
+  } else {
+    panel.querySelector('[data-action="build-teams"]').addEventListener('click', ()=>{
+      buildTeams(panel, game);
+    });
+  }
+
+  panel.querySelector('[data-action="save-result"]').addEventListener('click', ()=>{
+    saveResult(panel, month, game);
+  });
+}
+
+function syncPositionsArea(panel, area){
+  const presentIds = [...panel.querySelectorAll('[data-present]:checked')].map(cb=>cb.dataset.present);
+  const existingVals = {};
+  area.querySelectorAll('[data-position]').forEach(inp=>{ existingVals[inp.dataset.position] = inp.value; });
+  area.innerHTML = presentIds.map(pid=>{
+    const p = state.participants.find(x=>x.id===pid);
+    return `<div class="present-row">
+      <span class="name">${escapeHtml(p.name)}</span>
+      <input type="number" min="1" data-position="${pid}" value="${existingVals[pid] || ''}">
+    </div>`;
+  }).join('');
+}
+
+function buildTeams(panel, game){
+  const presentIds = [...panel.querySelectorAll('[data-present]:checked')].map(cb=>cb.dataset.present);
+  if(presentIds.length === 0){ showToast('Marcá quién está presente primero'); return; }
+  const shuffled = shuffle(presentIds);
+  const size = game.teamSize || 2;
+  const numTeams = Math.max(1, Math.round(shuffled.length / size));
+  const teams = Array.from({length: numTeams}, () => ({id: uid(), memberIds: []}));
+  shuffled.forEach((pid, i) => teams[i % numTeams].memberIds.push(pid));
+  const area = panel.querySelector('#teamsArea');
+  area.innerHTML = renderSavedTeams(teams);
+}
+
+async function saveResult(panel, month, game){
+  const presentIds = [...panel.querySelectorAll('[data-present]:checked')].map(cb=>cb.dataset.present);
+  if(presentIds.length === 0){ showToast('Marcá al menos un presente'); return; }
+
+  let result = { presentIds, type: game.type };
+
+  if(game.type === 'individual'){
+    const positions = {};
+    let ok = true;
+    panel.querySelectorAll('[data-position]').forEach(inp=>{
+      const v = parseInt(inp.value, 10);
+      if(!v || v < 1){ ok = false; }
+      positions[inp.dataset.position] = v;
+    });
+    if(!ok){ showToast('Completá la posición de cada presente'); return; }
+    const N = presentIds.length;
+    const points = {};
+    presentIds.forEach(pid => { points[pid] = N - positions[pid] + 1; });
+    result.positions = positions;
+    result.points = points;
+  } else {
+    const teamsArea = panel.querySelector('#teamsArea');
+    const teamBlocks = teamsArea.querySelectorAll('.team-block');
+    if(teamBlocks.length === 0){ showToast('Armá los equipos primero'); return; }
+    let ok = true;
+    teamBlocks.forEach(block => {
+      const v = parseInt(block.querySelector('[data-team-position]').value, 10);
+      if(!v || v < 1) ok = false;
+    });
+    if(!ok){ showToast('Completá la posición de cada equipo'); return; }
+    const rebuiltTeams = [...teamBlocks].map(block=>{
+      const posInput = block.querySelector('[data-team-position]');
+      const teamId = posInput.dataset.teamPosition;
+      const memberIds = JSON.parse(block.dataset.teamMembers || '[]');
+      return { id: teamId, memberIds, position: parseInt(posInput.value,10) };
+    });
+    const N = rebuiltTeams.length;
+    const points = {};
+    rebuiltTeams.forEach(t=>{
+      const pts = N - t.position + 1;
+      t.memberIds.forEach(pid => points[pid] = pts);
+    });
+    result.teams = rebuiltTeams;
+    result.points = points;
+  }
+
+  const backup = state.months[month] ? JSON.parse(JSON.stringify(state.months[month])) : {results:{}};
+  state.months[month] = state.months[month] || {results:{}};
+  state.months[month].results[game.id] = result;
+  const ok = await sSet('month:'+month, state.months[month]);
+  if(!ok){ state.months[month] = backup; return; }
+  renderSeasonTab();
+  renderStandings();
+  showToast('Resultado guardado');
+}
+
+// ---------- Tabla ----------
+function renderStandings(){
+  const totals = {};
+  const gamesCount = {};
+  state.participants.forEach(p => { totals[p.id] = 0; gamesCount[p.id] = 0; });
+
+  Object.values(state.months).forEach(monthData=>{
+    Object.values(monthData.results || {}).forEach(res=>{
+      Object.entries(res.points || {}).forEach(([pid, pts])=>{
+        if(totals[pid] === undefined){ totals[pid]=0; gamesCount[pid]=0; }
+        totals[pid] += pts;
+        gamesCount[pid] += 1;
+      });
+    });
+  });
+
+  const rows = state.participants
+    .map(p => ({name:p.name, points: totals[p.id]||0, games: gamesCount[p.id]||0}))
+    .sort((a,b)=> b.points - a.points || a.name.localeCompare(b.name));
+
+  const table = document.getElementById('standingsTable');
+  if(rows.length === 0){
+    table.innerHTML = '<tr><td class="empty">Todavía no hay participantes.</td></tr>';
+    return;
+  }
+  const rankClass = i => i===0?'gold':i===1?'silver':i===2?'bronze':'';
+  table.innerHTML = `
+    <tr><th>#</th><th>Jugador/a</th><th>Juegos jugados</th><th>Puntos</th></tr>
+    ${rows.map((r,i)=>`
+      <tr>
+        <td><span class="rank-badge ${rankClass(i)}">${i+1}</span></td>
+        <td>${escapeHtml(r.name)}</td>
+        <td>${r.games}</td>
+        <td class="points-cell">${r.points}</td>
+      </tr>`).join('')}
+  `;
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+loadAll();
+if(!ACCESS_CODE){ openAccessGate(); }
+</script>
+</body>
+</html>
